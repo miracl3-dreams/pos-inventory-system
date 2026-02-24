@@ -1,0 +1,26 @@
+# Environment
+.env
+
+# Dependencies
+/vendor/
+node_modules/
+
+# Cache
+*.cache
+*.log
+
+# POS Cache
+src/admin/cache/dashboard_stats.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# PHP temp files
+*.php~
+*.swp
+*.swo
