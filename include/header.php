@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/home.css">
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/pos.css">
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/sales.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+
+    <!-- <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script> -->
 
 
     <!-- <script src="/pos_inventory_system/assets/js/burger-a-menu.js"></script>

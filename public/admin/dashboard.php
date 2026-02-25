@@ -46,3 +46,6 @@ if (!in_array($page, $allowed_pages)) {
 </body>
 
 </html>
+
+<script src="/pos_inventory_system/assets/js/burger-a-menu.js"></script>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>

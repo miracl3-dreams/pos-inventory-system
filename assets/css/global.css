@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 :root {
@@ -29,6 +29,7 @@ body {
     align-items: center;
     margin-bottom: 24px;
     gap: 16px;
+    flex-wrap: wrap;
 }
 
 .header-left p {
@@ -40,15 +41,77 @@ body {
     color: var(--primary);
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-inline {
+    padding: 10px 40px 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.9rem;
+    width: 240px;
+    height: 42px;
+    transition: 0.2s;
+}
+
+.search-input-inline:focus {
+    border-color: var(--primary);
+}
+
+.search-icon-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    margin-top: 7px;
+}
+
+.search-icon-btn:hover {
+    color: var(--primary);
+}
+
+.btn-clear-action {
+    background: #f1f5f9;
+    color: #64748b;
+    text-decoration: none;
+    padding: 0 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    height: 42px;
+    display: flex;
+    align-items: center;
+}
+
 .btn-primary {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 0 20px;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: 0.2s;
+    height: 42px;
+    display: flex;
+    align-items: center;
 }
 
 .btn-primary:hover {
@@ -81,7 +144,6 @@ body {
     text-transform: uppercase;
     color: var(--text-muted);
     border-bottom: 1px solid var(--border);
-    letter-spacing: 0.05em;
 }
 
 .data-table td {
@@ -111,7 +173,6 @@ body {
     color: var(--green);
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem;
     margin-right: 8px;
 }
 
@@ -119,7 +180,6 @@ body {
     color: var(--red);
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem;
 }
 
 .modal {
@@ -138,7 +198,6 @@ body {
     max-width: 450px;
     border-radius: 12px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    margin-top: 90px;
 }
 
 .modal-header {
@@ -177,10 +236,8 @@ body {
     padding: 16px 20px;
     border-top: 1px solid var(--border);
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
     gap: 12px;
-    margin-top: 25px;
+    justify-content: flex-end;
 }
 
 .btn-secondary {
@@ -194,65 +251,52 @@ body {
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
-        align-items: flex-start;
-        margin-top: 60px;
+        align-items: center;
+        text-align: center;
     }
 
-    .header-left p {
-        font-size: 30px !important;
-        margin-bottom: 5px;
-    }
-
-    .header-right .btn-primary {
+    .header-right {
+        flex-direction: column;
         width: 100%;
+        align-items: stretch;
+    }
+
+    .search-container,
+    .search-input-inline {
+        width: 100%;
+    }
+
+    .btn-primary,
+    .btn-clear-action {
+        width: 100%;
+        justify-content: center;
     }
 
     .data-table thead {
         display: none;
     }
 
-    .data-table,
-    .data-table tbody,
     .data-table tr,
     .data-table td {
         display: block;
         width: 100%;
     }
 
-    .data-table tr {
-        border-bottom: 8px solid var(--bg-body);
-        padding: 12px 0;
-    }
-
     .data-table td {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        text-align: right;
         padding: 8px 16px;
-        border-bottom: none;
+        border: none;
     }
 
     .data-table td::before {
         content: attr(data-label);
         font-weight: 600;
         color: var(--text-muted);
-        font-size: 0.85rem;
     }
 
-    .modal-content {
-        margin-top: 90px;
-        width: 95%;
-    }
-
-    .modal-footer {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .modal-footer button {
-        width: 100%;
-        margin: 0 !important;
-        padding: 14px;
+    .data-table tr {
+        border-bottom: 8px solid var(--bg-body);
+        padding: 12px 0;
     }
 }
