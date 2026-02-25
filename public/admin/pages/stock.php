@@ -48,37 +48,37 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Product Name</th>
+                        <th>Stock Name</th>
                         <th>Description</th>
-                        <th>Category</th>
+                        <th>Stock Quantity</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($products as $prod): ?>
+                    <?php foreach ($stocks as $stck): ?>
                         <tr>
                             <td>#
-                                <?= str_pad($prod["product_id"], 3, "0", STR_PAD_LEFT); ?>
+                                <?= str_pad($stck["stock_id"], 3, "0", STR_PAD_LEFT); ?>
                             </td>
                             <td><strong>
-                                    <?= htmlspecialchars($prod["product_name"]); ?>
+                                    <?= htmlspecialchars($stck["stock_name"]); ?>
                                 </strong></td>
                             <td>
-                                <?= htmlspecialchars($prod["description"]); ?>
+                                <?= htmlspecialchars($stck["description"]); ?>
                             </td>
                             <td>
-                                <?= $prod["category_name"]; ?>
+                                <?= $stck["quantity"]; ?>
                             </td>
                             <td>
-                                <span class="status-badge <?= $prod["is_active"] ? 'active' : 'inactive'; ?>">
-                                    <?= $prod["is_active"] ? "Active" : "Inactive"; ?>
+                                <span class="status-badge <?= $stck["is_active"] ? 'active' : 'inactive'; ?>">
+                                    <?= $stck["is_active"] ? "Active" : "Inactive"; ?>
                                 </span>
                             </td>
                             <td>
                                 <div class="action-btns">
-                                    <a href="?delete=<?= $prod["product_id"]; ?>" class="btn-delete"
-                                        onclick="return confirm('Delete this product?')">Delete</a>
+                                    <a href="?delete=<?= $stck["stock_id"]; ?>" class="btn-delete"
+                                        onclick="return confirm('Delete this stock?')">Delete</a>
                                 </div>
                             </td>
                         </tr>
@@ -94,15 +94,15 @@
 
 <script>
     function openModal() {
-        document.getElementById("productModal").style.display = "block";
+        document.getElementById("stockModal").style.display = "block";
     }
 
     function closeModal() {
-        document.getElementById("productModal").style.display = "none";
+        document.getElementById("stockModal").style.display = "none";
     }
 
     window.onclick = function (event) {
-        let modal = document.getElementById("productModal");
+        let modal = document.getElementById("stockModal");
         if (event.target == modal) {
             closeModal();
         }
