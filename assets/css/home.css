@@ -23,8 +23,8 @@
 }
 
 .header-left p {
-    font-size: 14px;
-    color: var(--text-sub);
+    font-size: 25px;
+    color: var(--text-main);
     font-weight: 500;
 }
 
@@ -45,7 +45,9 @@
     padding: 25px;
     border-radius: 20px;
     display: flex;
+    flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
     box-shadow: var(--shadow);
     transition: transform 0.2s ease-in-out;
 }
@@ -55,6 +57,7 @@
 }
 
 .card-icon {
+    flex-shrink: 0;
     width: 56px;
     height: 56px;
     border-radius: 16px;
@@ -62,7 +65,7 @@
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    margin-right: 15px;
+    margin-right: 20px;
 }
 
 .card-blue .card-icon {
@@ -85,16 +88,26 @@
     color: var(--orange);
 }
 
+.card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .card-info h3 {
     font-size: 24px;
     font-weight: 700;
     color: var(--text-main);
+    line-height: 1.2;
+    margin: 0;
 }
 
 .card-info p {
     color: var(--text-sub);
     font-size: 14px;
     font-weight: 500;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .recent-activity {
@@ -111,7 +124,6 @@
     font-weight: 700;
     color: var(--text-main);
 }
-
 
 @media (max-width: 1024px) {
     .dashboard-cards {
@@ -130,5 +142,9 @@
 
     .card {
         padding: 20px;
+    }
+
+    .header-left p {
+        font-size: 20px;
     }
 }
