@@ -66,7 +66,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="header">
         <div class="header-left">
-            <p>Manage <span>Product Categories</span></p>
+            <p>Manage <span>Categories</span></p>
         </div>
         <div class="header-right">
             <button class="btn-primary" onclick="openModal()">+ Add Category</button>
@@ -87,7 +87,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="text" name="category_name" placeholder="e.g. Beverages" required>
                     </div>
                     <div class="input-group">
-                        <label>Description</label>
+                        <label>Category Description</label>
                         <textarea name="description" placeholder="Enter description here..."></textarea>
                     </div>
                 </div>
@@ -141,4 +141,20 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </html>
 
+<script>
+    function openModal() {
+        document.getElementById("categoryModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("categoryModal").style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        let modal = document.getElementById("categoryModal");
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+</script>
 <script src="/pos_inventory_system/assets/js/burger-a-menu.js"></script>
