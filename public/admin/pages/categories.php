@@ -99,7 +99,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <div class="category-container">
+    <div class="global-container">
         <div class="table-wrapper">
             <table class="data-table">
                 <thead>

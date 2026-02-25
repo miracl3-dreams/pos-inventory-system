@@ -10,6 +10,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/main.css">
+    <link rel="stylesheet" href="/pos_inventory_system/assets/css/global.css">
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/sidebar.css">
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/register.css">
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/login.css">
@@ -17,7 +18,6 @@
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/home.css">
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/pos.css">
     <link rel="stylesheet" href="/pos_inventory_system/assets/css/sales.css">
-    <link rel="stylesheet" href="/pos_inventory_system/assets/css/categories.css">
 
 
     <!-- <script src="/pos_inventory_system/assets/js/burger-a-menu.js"></script>

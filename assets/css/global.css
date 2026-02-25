@@ -58,7 +58,7 @@ body {
     transform: translateY(-2px);
 }
 
-.category-container {
+.global-container {
     background: var(--card-white);
     padding: 20px;
     border-radius: 20px;
@@ -285,7 +285,7 @@ body {
         text-transform: uppercase;
     }
 
-    .category-container {
+    .global-container {
         padding: 10px;
     }
 }
