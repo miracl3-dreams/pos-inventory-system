@@ -22,7 +22,7 @@
                 <h3>Add New Product</h3>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
-            <form method="POST" class="category-form">
+            <form method="POST" class="product-form">
                 <input type="hidden" name="action" value="add">
                 <div class="form-body">
                     <div class="input-group">
