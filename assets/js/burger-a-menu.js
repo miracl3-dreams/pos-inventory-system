@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const burger = document.querySelector('#admin-burger');
+    const burger = document.querySelector('#dashboard-burger');
     const navMenu = document.querySelector('#nav-menu');
 
     if (burger && navMenu) {

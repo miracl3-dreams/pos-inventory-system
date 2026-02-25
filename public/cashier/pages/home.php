@@ -12,3 +12,5 @@
 </body>
 
 </html>
+
+<script src="/pos_inventory_system/assets/js/burger-a-menu.js"></script>

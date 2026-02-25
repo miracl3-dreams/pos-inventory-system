@@ -1,0 +1,61 @@
+/* Sidebar Default Style */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--card-white);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    z-index: 999;
+}
+
+/* Burger Icon Animation */
+.menu-toggle {
+    display: none;
+    /* Hidden sa desktop */
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-main);
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+        /* Lalabas lang sa mobile */
+    }
+
+    #nav-menu {
+        display: none;
+        /* Itago ang links sa mobile by default */
+        flex-direction: column;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    #nav-menu.active {
+        display: flex;
+        /* Lalabas pag clinick ang burger */
+    }
+
+    /* Burger Transform to X */
+    #dashboard-burger.is-active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    #dashboard-burger.is-active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    #dashboard-burger.is-active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}
