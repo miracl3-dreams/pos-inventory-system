@@ -269,7 +269,9 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         window.onclick = function (e) {
             let m = document.getElementById("categoryModal");
-            if (e.target == m) { closeModal(); }
+            if (e.target == m) {
+                closeModal();
+            }
         };
         window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
