@@ -60,6 +60,7 @@ $current_page = $_GET['page'] ?? 'home';
         <?php endif; ?>
 
         <div class="logout-container">
+            <a href="../../src/settings.php" class="settings">Settings</a>
             <a href="../../src/logout.php" class="logout">Logout</a>
         </div>
 

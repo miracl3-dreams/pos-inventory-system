@@ -80,6 +80,25 @@ if (isset($_GET["edit"])) {
     }
 }
 
+$limit = 10;
+$page = isset($_GET['pg']) && is_numeric($_GET['pg']) ? (int) $_GET['pg'] : 1;
+$page = max($page, 1);
+$offset = ($page - 1) * $limit;
+
+$countSql = "SELECT COUNT(*) FROM categories c WHERE 1=1";
+$countParams = [];
+
+if ($searchTerm !== '') {
+    $countSql .= " AND (c.category_name LIKE ? OR c.description LIKE ?)";
+    $countParams[] = "%$searchTerm%";
+    $countParams[] = "%$searchTerm%";
+}
+
+$countStmt = $link_id->prepare($countSql);
+$countStmt->execute($countParams);
+$totalRecords = $countStmt->fetchColumn();
+$totalPages = ceil($totalRecords / $limit);
+
 $sql = "SELECT c.*, 
        (SELECT COUNT(*) FROM products p WHERE p.category_id = c.category_id AND p.is_active = 1) AS total_products 
         FROM categories c WHERE 1=1";
@@ -91,7 +110,7 @@ if ($searchTerm !== '') {
     $params[] = "%$searchTerm%";
 }
 
-$sql .= " ORDER BY c.category_id DESC";
+$sql .= " ORDER BY c.category_id DESC LIMIT $limit OFFSET $offset";
 $stmt = $link_id->prepare($sql);
 $stmt->execute($params);
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -153,11 +172,11 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="input-group">
                         <label>Category Description</label>
-                        <textarea name=" description" rows="4">
-                        <?= htmlspecialchars($editCategory['description'] ?? ''); ?></textarea>
+                        <textarea name="description"
+                            rows="4"><?= htmlspecialchars($editCategory['description'] ?? ''); ?></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class=" modal-footer">
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
                     <button type="submit" class="btn-primary">Save Category</button>
                 </div>
@@ -214,6 +233,25 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
         </div>
     </div>
+
+    <?php if ($totalPages > 1): ?>
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+                <a href="dashboard.php?page=categories&pg=<?= $page - 1 ?>&search=<?= urlencode($searchTerm) ?>">Prev</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <a href="dashboard.php?page=categories&pg=<?= $i ?>&search=<?= urlencode($searchTerm) ?>"
+                    class="<?= ($i == $page) ? 'active' : '' ?>">
+                    <?= $i ?>
+                </a>
+            <?php endfor; ?>
+
+            <?php if ($page < $totalPages): ?>
+                <a href="dashboard.php?page=categories&pg=<?= $page + 1 ?>&search=<?= urlencode($searchTerm) ?>">Next</a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
     <script>
         function openModal() {
