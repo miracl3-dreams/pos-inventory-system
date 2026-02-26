@@ -249,6 +249,10 @@ body {
 }
 
 @media (max-width: 768px) {
+    .main-content {
+        margin-top: 90px !important;
+    }
+
     .header {
         flex-direction: column;
         align-items: center;
