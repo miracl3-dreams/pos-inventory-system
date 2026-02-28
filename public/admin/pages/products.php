@@ -165,7 +165,7 @@ $suppliers = ($suppliers_query) ? $suppliers_query->fetchAll(PDO::FETCH_ASSOC) :
                 <a href="dashboard.php?page=products" class="btn-clear-action">Clear Search</a>
             <?php endif; ?>
 
-            <button class="btn-primary" onclick="openModal()">+ Add Category</button>
+            <button class="btn-primary" onclick="openModal()">+ Add Product</button>
         </div>
     </div>
 
@@ -183,14 +183,20 @@ $suppliers = ($suppliers_query) ? $suppliers_query->fetchAll(PDO::FETCH_ASSOC) :
 
                     <div class="input-group">
                         <label>Product Barcode</label>
-                        <input type="text" name="barcode" required
-                            value="<?= htmlspecialchars($editProduct['barcode'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="text" name="barcode" required
+                                value="<?= htmlspecialchars($editProduct['barcode'] ?? ''); ?>">
+                            <i class="fa-solid fa-barcode"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Product Name</label>
-                        <input type="text" name="product_name" required
-                            value="<?= htmlspecialchars($editProduct['product_name'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="text" name="product_name" required
+                                value="<?= htmlspecialchars($editProduct['product_name'] ?? ''); ?>">
+                            <i class="fa-brands fa-product-hunt"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
@@ -219,31 +225,47 @@ $suppliers = ($suppliers_query) ? $suppliers_query->fetchAll(PDO::FETCH_ASSOC) :
 
                     <div class="input-group">
                         <label>Product Cost Price</label>
-                        <input type="number" step="0.01" name="cost_price" required
-                            value="<?= $editProduct['cost_price'] ?? ''; ?>">
+                        <div class="input-with-icon">
+                            <input type="number" step="0.01" name="cost_price" required
+                                value="<?= $editProduct['cost_price'] ?? ''; ?>">
+                            <i class="fa-solid fa-peso-sign"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Product Sell Price</label>
-                        <input type="number" step="0.01" name="selling_price" required
-                            value="<?= $editProduct['selling_price'] ?? ''; ?>">
+                        <div class="input-with-icon">
+                            <input type="number" step="0.01" name="selling_price" required
+                                value="<?= $editProduct['selling_price'] ?? ''; ?>">
+                            <i class="fa-solid fa-peso-sign"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Stock Quantity</label>
-                        <input type="number" name="stock_qty" required value="<?= $editProduct['stock_qty'] ?? ''; ?>">
+                        <div class="input-with-icon">
+                            <input type="number" name="stock_qty" required
+                                value="<?= $editProduct['stock_qty'] ?? ''; ?>">
+                            <i class="fa-solid fa-certificate"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Reorder Level</label>
-                        <input type="number" name="reorder_level" required
-                            value="<?= $editProduct['reorder_level'] ?? ''; ?>">
+                        <div class="input-with-icon">
+                            <input type="number" name="reorder_level" required
+                                value="<?= $editProduct['reorder_level'] ?? ''; ?>">
+                            <i class="fa-solid fa-bars-staggered"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Product Unit(Pcs)</label>
-                        <input type="text" name="unit" required
-                            value="<?= htmlspecialchars($editProduct['unit'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="text" name="unit" required
+                                value="<?= htmlspecialchars($editProduct['unit'] ?? ''); ?>">
+                            <i class="fa-solid fa-1"></i>
+                        </div>
                     </div>
                 </div>
 

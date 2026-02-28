@@ -124,29 +124,21 @@ $suppliersList = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p>Manage <span>Suppliers</span></p>
         </div>
         <div class="header-right">
-            <form method="GET" action="dashboard.php" class="search-container">
+            <form method="GET" class="search-container">
                 <input type="hidden" name="page" value="suppliers">
-
-                <div class="search-input-wrapper" style="position: relative; display: flex; align-items: center;">
-                    <input type="text" name="search" class="search-input-inline" placeholder="Search suppliers..."
-                        value="<?= htmlspecialchars($searchTerm) ?>" style="padding-right: 35px;">
-
-                    <button type="submit" class="search-icon-btn"
-                        style="position: absolute; right: 5px; background: none; border: none; cursor: pointer;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </button>
-                </div>
+                <input type="text" name="search" class="search-input-inline" placeholder="Search supplier..."
+                    value="<?= htmlspecialchars($searchTerm) ?>">
+                <button type="submit" class="search-icon-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
             </form>
 
             <?php if ($searchTerm !== ''): ?>
-                <a href="dashboard.php?page=suppliers" class="btn-clear-action"
-                    style="margin-left: 10px; font-size: 0.8rem; color: #666; text-decoration: none;">
-                    Clear Search
-                </a>
+                <a href="dashboard.php?page=suppliers" class="btn-clear-action">Clear Search</a>
             <?php endif; ?>
 
             <button class="btn-primary" onclick="openModal()">+ Add Supplier</button>
@@ -167,24 +159,38 @@ $suppliersList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <div class="input-group">
                         <label>Supplier Name</label>
-                        <input type="text" name="supplier_name" required
-                            value="<?= htmlspecialchars($editSupplier['supplier_name'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="text" name="supplier_name" required
+                                value="<?= htmlspecialchars($editSupplier['supplier_name'] ?? ''); ?>">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Contact Person</label>
-                        <input type="text" name="contact_person"
-                            value="<?= htmlspecialchars($editSupplier['contact_person'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="text" name="contact_person"
+                                value="<?= htmlspecialchars($editSupplier['contact_person'] ?? ''); ?>">
+                            <i class="fa-regular fa-address-book"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Contact Phone</label>
-                        <input type="text" name="phone" value="<?= htmlspecialchars($editSupplier['phone'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="text" name="phone"
+                                value="<?= htmlspecialchars($editSupplier['phone'] ?? ''); ?>">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Email Address</label>
-                        <input type="email" name="email" value="<?= htmlspecialchars($editSupplier['email'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="email" name="email"
+                                value="<?= htmlspecialchars($editSupplier['email'] ?? ''); ?>">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">

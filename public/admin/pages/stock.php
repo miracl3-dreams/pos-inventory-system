@@ -118,6 +118,8 @@ $stocks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Management</title>
 </head>
 
@@ -130,7 +132,7 @@ $stocks = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="header-right">
             <form method="GET" class="search-container">
                 <input type="hidden" name="page" value="stocks">
-                <input type="text" name="search" class="search-input-inline" placeholder="Search product..."
+                <input type="text" name="search" class="search-input-inline" placeholder="Search stock..."
                     value="<?= htmlspecialchars($searchTerm) ?>">
                 <button type="submit" class="search-icon-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -140,6 +142,7 @@ $stocks = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </svg>
                 </button>
             </form>
+
             <?php if ($searchTerm !== ''): ?>
                 <a href="dashboard.php?page=stocks" class="btn-clear-action">Clear Search</a>
             <?php endif; ?>
@@ -160,17 +163,26 @@ $stocks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <div class="input-group">
                         <label>Product Name</label>
-                        <input type="text" id="modal_product_name" readonly>
+                        <div class="input-with-icon">
+                            <input type="text" id="modal_product_name" readonly>
+                            <i class="fa-solid fa-user"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>Current Quantity</label>
-                        <input type="text" id="modal_current_qty" readonly>
+                        <div class="input-with-icon">
+                            <input type="text" id="modal_current_qty" readonly>
+                            <i class="fa-solid fa-certificate"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
                         <label>New Quantity</label>
-                        <input type="number" name="new_quantity" id="modal_new_qty" required min="0">
+                        <div class="input-with-icon">
+                            <input type="number" name="new_quantity" id="modal_new_qty" required min="0">
+                            <i class="fa-solid fa-certificate"></i>
+                        </div>
                     </div>
 
                     <div class="input-group">
@@ -193,7 +205,6 @@ $stocks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <table class="data-table">
                 <thead>
                     <tr>
-                        <!-- <th>Barcode</th> -->
                         <th>Product Name</th>
                         <th>Current Stock</th>
                         <th>Unit</th>
@@ -204,24 +215,25 @@ $stocks = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php if (empty($stocks)): ?>
                         <tr>
-                            <td colspan="6" style="text-align: center; padding: 20px;">No stocks found.</td>
+                            <td colspan="5" style="text-align: center; padding: 20px;">No stocks found.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($stocks as $st): ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars($st["product_name"]); ?></strong></td>
-                                <td><?= $st["stock_qty"]; ?></td>
-                                <td><?= htmlspecialchars($st["unit"]); ?></td>
-                                <td>
+                                <td data-label="Product Name"><strong><?= htmlspecialchars($st["product_name"]); ?></strong>
+                                </td>
+                                <td data-label="Current Stock"><?= $st["stock_qty"]; ?></td>
+                                <td data-label="Unit"><?= htmlspecialchars($st["unit"]); ?></td>
+                                <td data-label="Status">
                                     <?php if ($st["stock_qty"] <= 0): ?>
                                         <span class="status-badge inactive">Out of Stock</span>
                                     <?php else: ?>
                                         <span class="status-badge active">In Stock</span>
                                     <?php endif; ?>
                                 </td>
-                                <td>
+                                <td data-label="Actions">
                                     <div class="action-btns">
-                                        <button type="button"
+                                        <button type="button" class="btn-primary" style="height: 32px; font-size: 0.8rem;"
                                             onclick="openAdjustModal(<?= $st['product_id']; ?>, '<?= addslashes($st['product_name']); ?>', <?= $st['stock_qty']; ?>)">
                                             Adjust
                                         </button>

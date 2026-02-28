@@ -167,8 +167,11 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <input type="hidden" name="category_id" value="<?= $editCategory['category_id'] ?? ''; ?>">
                     <div class="input-group">
                         <label>Category Name</label>
-                        <input type="text" name="category_name" required
-                            value="<?= htmlspecialchars($editCategory['category_name'] ?? ''); ?>">
+                        <div class="input-with-icon">
+                            <input type="text" name="category_name" required
+                                value="<?= htmlspecialchars($editCategory['category_name'] ?? ''); ?>">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
                     </div>
                     <div class="input-group">
                         <label>Category Description</label>

@@ -16,7 +16,7 @@ if (!isset($_SESSION["user_role"]) || $_SESSION["user_role"] !== "ADMIN") {
 $stmt = $link_id->prepare("
     SELECT IFNULL(SUM(total_amount),0) as today_sales
     FROM sales
-    WHERE DATE(created_at) = CURDATE()
+    WHERE DATE(sale_date) = CURDATE()
 ");
 $stmt->execute();
 $todaySales = $stmt->fetch(PDO::FETCH_ASSOC)["today_sales"];
@@ -24,7 +24,7 @@ $todaySales = $stmt->fetch(PDO::FETCH_ASSOC)["today_sales"];
 $stmt = $link_id->prepare("
     SELECT COUNT(*) as total_trans
     FROM sales
-    WHERE DATE(created_at) = CURDATE()
+    WHERE DATE(sale_date) = CURDATE()
 ");
 $stmt->execute();
 $todayTrans = $stmt->fetch(PDO::FETCH_ASSOC)["total_trans"];
@@ -32,7 +32,7 @@ $todayTrans = $stmt->fetch(PDO::FETCH_ASSOC)["total_trans"];
 $stmt = $link_id->prepare("
     SELECT COUNT(*) as low_stock
     FROM products
-    WHERE quantity <= reorder_level
+    WHERE stock_qty <= reorder_level
 ");
 $stmt->execute();
 $lowStockCount = $stmt->fetch(PDO::FETCH_ASSOC)["low_stock"];
@@ -47,7 +47,7 @@ $supplierCount = $stmt->fetch(PDO::FETCH_ASSOC)["supplier_total"];
 $stmt = $link_id->prepare("
     SELECT *
     FROM sales
-    ORDER BY created_at DESC
+    ORDER BY sale_date DESC
     LIMIT 5
 ");
 $stmt->execute();
@@ -80,7 +80,9 @@ $recentSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="card card-blue">
                     <div class="card-icon">₱</div>
                     <div class="card-info">
-                        <h3 id="todaySales">₱ 0.00</h3>
+                        <h3 id="todaySales">₱
+                            <?= number_format($todaySales, 2); ?>
+                        </h3>
                         <p>Today's Sales</p>
                     </div>
                 </div>
@@ -88,7 +90,9 @@ $recentSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="card card-green">
                     <div class="card-icon">🛒</div>
                     <div class="card-info">
-                        <h3 id="todayTrans">0</h3>
+                        <h3 id="todayTrans">
+                            <?= number_format($todayTrans); ?>
+                        </h3>
                         <p>Today's Transactions</p>
                     </div>
                 </div>
@@ -96,7 +100,9 @@ $recentSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="card card-red">
                     <div class="card-icon">⚠️</div>
                     <div class="card-info">
-                        <h3 id="lowStockCount">0</h3>
+                        <h3 id="lowStockCount">
+                            <?= number_format($lowStockCount); ?>
+                        </h3>
                         <p>Low Stock Items</p>
                     </div>
                 </div>
@@ -104,7 +110,9 @@ $recentSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="card card-orange">
                     <div class="card-icon">🚚</div>
                     <div class="card-info">
-                        <h3 id="supplierCount">0</h3>
+                        <h3 id="supplierCount">
+                            <?= number_format($supplierCount); ?>
+                        </h3>
                         <p>Total Suppliers</p>
                     </div>
                 </div>
@@ -113,9 +121,37 @@ $recentSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="recent-activity">
                 <h3>Recent Sales</h3>
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Total Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($recentSales)): ?>
+                            <?php foreach ($recentSales as $sale): ?>
+                                <tr>
+                                    <td>
+                                        <?= htmlspecialchars($sale['id']); ?>
+                                    </td>
+                                    <td>₱
+                                        <?= number_format($sale['total_amount'], 2); ?>
+                                    </td>
+                                    <td>
+                                        <?= date("M d, Y h:i A", strtotime($sale['sale_date'])); ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="3">No recent sales found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </div>
 
 </body>
 
