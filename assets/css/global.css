@@ -156,6 +156,19 @@ body {
     font-size: 0.95rem;
 }
 
+.data-table tbody tr:hover {
+    background-color: #f8fafc;
+    transition: background-color 0.2s ease;
+}
+
+.recent-activity h3 {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .status-badge {
     padding: 4px 10px;
     border-radius: 6px;
@@ -378,5 +391,10 @@ body {
     .data-table tr {
         border-bottom: 8px solid var(--bg-body);
         padding: 12px 0;
+    }
+
+    .data-table th:first-child,
+    .data-table td:first-child {
+        width: 100px;
     }
 }

@@ -32,7 +32,15 @@ $stmt = $link_id->prepare("SELECT COUNT(*) as supplier_total FROM suppliers");
 $stmt->execute();
 $supplierCount = $stmt->fetch(PDO::FETCH_ASSOC)["supplier_total"];
 
-$stmt = $link_id->prepare("SELECT * FROM sales ORDER BY sale_date DESC LIMIT 5");
+$stmt = $link_id->prepare("
+    SELECT s.*, GROUP_CONCAT(p.product_name SEPARATOR ', ') as items 
+    FROM sales s 
+    LEFT JOIN sale_items si ON s.sale_id = si.sale_id 
+    LEFT JOIN products p ON si.product_id = p.product_id 
+    GROUP BY s.sale_id 
+    ORDER BY s.sale_date DESC 
+    LIMIT 5
+");
 $stmt->execute();
 $recentSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -100,32 +108,49 @@ $recentSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <div class="recent-activity">
-                <h3>Recent Sales</h3>
-                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 10px;">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Total Amount</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($recentSales)): ?>
-                            <?php foreach ($recentSales as $sale): ?>
+            <div class="recent-activity" style="margin-top: 30px;">
+                <h3 style="margin-bottom: 15px; font-weight: 700;">Recent Sales</h3>
+
+                <div class="global-container">
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    <td><?= htmlspecialchars($sale['id']); ?></td>
-                                    <td>₱ <?= number_format($sale['total_amount'], 2); ?></td>
-                                    <td><?= date("M d, Y h:i A", strtotime($sale['sale_date'])); ?></td>
+                                    <th>ID</th>
+                                    <th>Items</th>
+                                    <th>Total Amount</th>
+                                    <th>Date</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="3" style="text-align:center;">No recent sales found.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($recentSales)): ?>
+                                    <?php foreach ($recentSales as $sale): ?>
+                                        <tr>
+                                            <td data-label="ID">#<?= htmlspecialchars($sale['sale_id']); ?></td>
+                                            <td data-label="Items">
+                                                <span style="font-size: 0.9rem; color: var(--text-main);">
+                                                    <?= htmlspecialchars($sale['items'] ?? 'No items'); ?>
+                                                </span>
+                                            </td>
+                                            <td data-label="Total Amount" style="font-weight: 600; color: var(--text-main);">
+                                                ₱<?= number_format($sale['total_amount'], 2); ?>
+                                            </td>
+                                            <td data-label="Date" style="color: var(--text-muted);">
+                                                <?= date("M d, Y h:i A", strtotime($sale['sale_date'])); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="4" style="text-align:center; padding: 30px; color: var(--text-muted);">
+                                            No recent sales found.
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

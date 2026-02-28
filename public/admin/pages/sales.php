@@ -96,10 +96,16 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         <div class="header-right">
             <form method="GET" class="search-container">
-                <input type="hidden" name="page" value="sales">
-                <input type="text" name="search" class="search-input-inline" placeholder="Search product..."
+                <input type="hidden" name="page" value="products">
+                <input type="text" name="search" class="search-input-inline" placeholder="Search..."
                     value="<?= htmlspecialchars($searchTerm) ?>">
-                <button type="submit" class="search-icon-btn">🔍</button>
+                <button type="submit" class="search-icon-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
             </form>
         </div>
     </div>

@@ -11,9 +11,8 @@ if (!isset($_SESSION["user_id"]) || ($_SESSION["user_role"] ?? "") !== "ADMIN") 
 function redirectToPage($msg = '')
 {
     $url = "dashboard.php?page=products";
-    if ($msg) {
+    if ($msg)
         $url .= "&msg=" . urlencode($msg);
-    }
     header("Location: $url");
     exit;
 }
@@ -24,8 +23,8 @@ $searchTerm = trim($_GET['search'] ?? '');
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST["action"] ?? "";
     $id = (int) ($_POST["product_id"] ?? 0);
-    $barcode = trim($_POST["barcode"] ?? "");
     $product_name = trim($_POST["product_name"] ?? "");
+    $size = trim($_POST["size"] ?? "");
     $category_id = (int) ($_POST["category_id"] ?? 0);
     $supplier_id = (int) ($_POST["supplier_id"] ?? 0);
     $cost_price = (float) ($_POST["cost_price"] ?? 0);
@@ -34,19 +33,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $reorder_level = (int) ($_POST["reorder_level"] ?? 0);
     $unit = trim($_POST["unit"] ?? "");
 
-    if ($product_name === "" || $barcode === "") {
-        redirectToPage("Product name and barcode required.");
+    if ($product_name === "") {
+        redirectToPage("Product name required.");
     }
 
     if ($action === "add") {
-        $stmt = $link_id->prepare("SELECT product_id FROM products WHERE barcode = ? LIMIT 1");
-        $stmt->execute([$barcode]);
+        $stmt = $link_id->prepare("SELECT product_id FROM products WHERE product_name = ? AND size = ? LIMIT 1");
+        $stmt->execute([$product_name]);
         if ($stmt->fetch()) {
             redirectToPage("Product already exists.");
         }
         $data = [
-            "barcode" => $barcode,
             "product_name" => $product_name,
+            "size" => $size,
             "category_id" => $category_id,
             "supplier_id" => $supplier_id,
             "cost_price" => $cost_price,
@@ -61,13 +60,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if ($action === "edit" && $id > 0) {
-        $stmt = $link_id->prepare("SELECT product_id FROM products WHERE barcode = ? AND product_id != ? LIMIT 1");
-        $stmt->execute([$barcode, $id]);
+        $stmt = $link_id->prepare("SELECT product_id FROM products WHERE product_name = ? AND size = ? AND product_id != ? LIMIT 1");
+        $stmt->execute([$product_name, $size, $id]);
         if ($stmt->fetch()) {
-            redirectToPage("Product already exists.");
+            redirectToPage("Product with this size already exists.");
         }
-        $stmt = $link_id->prepare("UPDATE products SET barcode = ?, product_name = ?, category_id = ?, supplier_id = ?, cost_price = ?, selling_price = ?, stock_qty = ?, reorder_level = ?, unit = ?, updated_at = ? WHERE product_id = ?");
-        $stmt->execute([$barcode, $product_name, $category_id, $supplier_id, $cost_price, $selling_price, $stock_qty, $reorder_level, $unit, date("Y-m-d H:i:s"), $id]);
+        $stmt = $link_id->prepare("UPDATE products SET product_name = ?, size = ?, category_id = ?, supplier_id = ?, cost_price = ?, selling_price = ?, stock_qty = ?, reorder_level = ?, unit = ?, updated_at = ? WHERE product_id = ?");
+        $stmt->execute([$product_name, $size, $category_id, $supplier_id, $cost_price, $selling_price, $stock_qty, $reorder_level, $unit, date("Y-m-d H:i:s"), $id]);
         redirectToPage("Product updated successfully.");
     }
 }
@@ -99,8 +98,8 @@ $countSql = "SELECT COUNT(*) FROM products p LEFT JOIN categories c ON c.categor
 $countParams = [];
 if ($searchTerm !== '') {
     $searchValue = "%$searchTerm%";
-    $countSql .= " AND (p.product_name LIKE ? OR p.barcode LIKE ? OR c.category_name LIKE ? OR s.supplier_name LIKE ?)";
-    $countParams = [$searchValue, $searchValue, $searchValue, $searchValue];
+    $countSql .= " AND (p.product_name LIKE ? OR c.category_name LIKE ? OR s.supplier_name LIKE ?)";
+    $countParams = [$searchValue, $searchValue, $searchValue];
 }
 $countStmt = $link_id->prepare($countSql);
 $countStmt->execute($countParams);
@@ -109,7 +108,7 @@ $totalPages = ceil($totalRecords / $limit);
 
 $sql = "SELECT p.*, c.category_name, s.supplier_name FROM products p LEFT JOIN categories c ON c.category_id = p.category_id LEFT JOIN suppliers s ON s.supplier_id = p.supplier_id WHERE 1=1";
 if ($searchTerm !== '') {
-    $sql .= " AND (p.product_name LIKE ? OR p.barcode LIKE ? OR c.category_name LIKE ? OR s.supplier_name LIKE ?)";
+    $sql .= " AND (p.product_name LIKE ? OR c.category_name LIKE ? OR s.supplier_name LIKE ?)";
 }
 $sql .= " ORDER BY p.product_id DESC LIMIT ? OFFSET ?";
 
@@ -117,7 +116,6 @@ $stmt = $link_id->prepare($sql);
 $idx = 1;
 if ($searchTerm !== '') {
     $searchValue = "%$searchTerm%";
-    $stmt->bindValue($idx++, $searchValue);
     $stmt->bindValue($idx++, $searchValue);
     $stmt->bindValue($idx++, $searchValue);
     $stmt->bindValue($idx++, $searchValue);
@@ -132,7 +130,7 @@ $categories = ($categories_query) ? $categories_query->fetchAll(PDO::FETCH_ASSOC
 
 $suppliers_query = $link_id->query("SELECT supplier_id, supplier_name FROM suppliers ORDER BY supplier_name ASC");
 $suppliers = ($suppliers_query) ? $suppliers_query->fetchAll(PDO::FETCH_ASSOC) : [];
-$unitsList = ['Pcs', 'Pack', 'Box', 'Kg', 'Gram', 'Liter', 'Bottle', 'Sack'];
+$unitsList = ['Pcs', 'Pack', 'Box', 'Kilo', 'Gram', 'Liter', 'Bottle', 'Sack'];
 ?>
 
 <!DOCTYPE html>
@@ -183,19 +181,19 @@ $unitsList = ['Pcs', 'Pack', 'Box', 'Kg', 'Gram', 'Liter', 'Bottle', 'Sack'];
                     <input type="hidden" name="product_id" value="<?= $editProduct['product_id'] ?? ''; ?>">
 
                     <div class="input-group">
-                        <label>Product Barcode</label>
-                        <div class="input-with-icon">
-                            <input type="text" name="barcode" required
-                                value="<?= htmlspecialchars($editProduct['barcode'] ?? ''); ?>">
-                            <i class="fa-solid fa-barcode"></i>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
                         <label>Product Name</label>
                         <div class="input-with-icon">
                             <input type="text" name="product_name" required
                                 value="<?= htmlspecialchars($editProduct['product_name'] ?? ''); ?>">
+                            <i class="fa-brands fa-product-hunt"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Size / Variation</label>
+                        <div class="input-with-icon">
+                            <input type="text" name="size" placeholder="e.g. 150g or Large"
+                                value="<?= htmlspecialchars($editProduct['size'] ?? ''); ?>">
                             <i class="fa-brands fa-product-hunt"></i>
                         </div>
                     </div>
@@ -286,8 +284,8 @@ $unitsList = ['Pcs', 'Pack', 'Box', 'Kg', 'Gram', 'Liter', 'Bottle', 'Sack'];
                 <thead>
                     <tr>
                         <th>Product Name</th>
+                        <th>Size</th>
                         <th>Category</th>
-                        <th>Supplier</th>
                         <th>Cost Price</th>
                         <th>Sell Price</th>
                         <th>Stock Qty</th>
@@ -298,7 +296,7 @@ $unitsList = ['Pcs', 'Pack', 'Box', 'Kg', 'Gram', 'Liter', 'Bottle', 'Sack'];
                 <tbody>
                     <?php if (empty($products)): ?>
                         <tr>
-                            <td colspan="8" style="text-align: center; padding: 20px;">No products found.</td>
+                            <td colspan="9" style="text-align: center; padding: 20px;">No products found.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($products as $prod): ?>
@@ -306,11 +304,11 @@ $unitsList = ['Pcs', 'Pack', 'Box', 'Kg', 'Gram', 'Liter', 'Bottle', 'Sack'];
                                 <td data-label="Product Name"><strong>
                                         <?= htmlspecialchars($prod["product_name"]); ?>
                                     </strong></td>
+                                <td data-label="Size"><strong>
+                                        <?= htmlspecialchars($prod["size"]); ?>
+                                    </strong></td>
                                 <td data-label="Category Name">
                                     <?= htmlspecialchars($prod["category_name"]); ?>
-                                </td>
-                                <td data-label="Supplier Name">
-                                    <?= htmlspecialchars($prod["supplier_name"]); ?>
                                 </td>
                                 <td data-label="Cost Price">₱
                                     <?= number_format($prod["cost_price"], 2); ?>
