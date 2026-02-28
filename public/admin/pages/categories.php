@@ -24,7 +24,6 @@ $searchTerm = trim($_GET['search'] ?? '');
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST["action"] ?? "";
     $name = trim($_POST["category_name"] ?? "");
-    $desc = trim($_POST["description"] ?? "");
     $id = (int) ($_POST["category_id"] ?? 0);
 
     if ($name === "") {
@@ -38,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (!$stmt->fetch()) {
             $data = [
                 "category_name" => $name,
-                "description" => $desc,
                 "is_active" => 1
             ];
             PDO_InsertRecord($link_id, "categories", $data, true);
@@ -53,8 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute([$name, $id]);
 
         if (!$stmt->fetch()) {
-            $stmt = $link_id->prepare("UPDATE categories SET category_name = ?, description = ? WHERE category_id = ?");
-            $stmt->execute([$name, $desc, $id]);
+            $stmt = $link_id->prepare("UPDATE categories SET category_name = ? WHERE category_id = ?");
+            $stmt->execute([$name, $id]);
             redirectToPage('success', 'Category updated successfully!');
         } else {
             redirectToPage('error', 'Category name already exists.');
@@ -89,7 +87,7 @@ $countSql = "SELECT COUNT(*) FROM categories c WHERE 1=1";
 $countParams = [];
 
 if ($searchTerm !== '') {
-    $countSql .= " AND (c.category_name LIKE ? OR c.description LIKE ?)";
+    $countSql .= " AND (c.category_name LIKE ?)";
     $countParams[] = "%$searchTerm%";
     $countParams[] = "%$searchTerm%";
 }
@@ -105,7 +103,7 @@ $sql = "SELECT c.*,
 
 $params = [];
 if ($searchTerm !== '') {
-    $sql .= " AND (c.category_name LIKE ? OR c.description LIKE ?)";
+    $sql .= " AND (c.category_name LIKE ?)";
     $params[] = "%$searchTerm%";
     $params[] = "%$searchTerm%";
 }
@@ -173,11 +171,6 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <i class="fa-solid fa-layer-group"></i>
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label>Category Description</label>
-                        <textarea name="description"
-                            rows="4"><?= htmlspecialchars($editCategory['description'] ?? ''); ?></textarea>
-                    </div>
                 </div>
                 <div class=" modal-footer">
                     <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
@@ -193,7 +186,6 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Description</th>
                         <th>Products</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -210,9 +202,6 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td data-label="Name"><strong>
                                         <?= htmlspecialchars($cat["category_name"]); ?>
                                     </strong></td>
-                                <td data-label="Description">
-                                    <?= htmlspecialchars($cat["description"]); ?>
-                                </td>
                                 <td data-label="Products">
                                     <?= $cat["total_products"]; ?>
                                 </td>

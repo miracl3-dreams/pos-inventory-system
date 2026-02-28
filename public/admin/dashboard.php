@@ -20,8 +20,8 @@ $allowed_pages = [
     'categories',
     'products',
     'suppliers',
-    'stock',
-    'purchases',
+    'sales',
+    'transactions',
 ];
 
 if (!in_array($page, $allowed_pages)) {

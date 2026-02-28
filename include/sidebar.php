@@ -35,12 +35,12 @@ $current_page = $_GET['page'] ?? 'home';
                 Suppliers
             </a>
 
-            <a href="dashboard.php?page=stock" class="<?= $current_page === 'stock' ? 'active' : '' ?>">
-                Stock
+            <a href="dashboard.php?page=sales" class="<?= $current_page === 'sales' ? 'active' : '' ?>">
+                Sales
             </a>
 
-            <a href="dashboard.php?page=purchases" class="<?= $current_page === 'purchases' ? 'active' : '' ?>">
-                Purchases
+            <a href="dashboard.php?page=transactions" class="<?= $current_page === 'transactions' ? 'active' : '' ?>">
+                Transactions
             </a>
 
         <?php elseif ($role === 'CASHIER'): ?>
@@ -53,9 +53,9 @@ $current_page = $_GET['page'] ?? 'home';
                 POS
             </a>
 
-            <a href="dashboard.php?page=sales" class="<?= $current_page === 'sales' ? 'active' : '' ?>">
+            <!-- <a href="dashboard.php?page=sales" class="< / ?= $current_page === 'sales' ? 'active' : '' ?>">
                 Sales
-            </a>
+            </a> -->
 
         <?php endif; ?>
 

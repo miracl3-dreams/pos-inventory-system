@@ -26,9 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST["action"] ?? "";
     $id = (int) ($_POST["supplier_id"] ?? 0);
     $supplier_name = trim($_POST["supplier_name"] ?? "");
-    $contact_person = trim($_POST["contact_person"] ?? "");
-    $phone = trim($_POST["phone"] ?? "");
-    $email = trim($_POST["email"] ?? "");
     $address = trim($_POST["address"] ?? "");
 
     if ($supplier_name === "") {
@@ -38,19 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($action === "add") {
         $data = [
             "supplier_name" => $supplier_name,
-            "contact_person" => $contact_person,
-            "phone" => $phone,
-            "email" => $email,
             "address" => $address,
-            "is_active" => 1
         ];
         PDO_InsertRecord($link_id, "suppliers", $data, true);
         redirectToPage("Supplier added successfully.");
     }
 
     if ($action === "edit" && $id > 0) {
-        $stmt = $link_id->prepare("UPDATE suppliers SET supplier_name = ?, contact_person = ?, phone = ?, email = ?, address = ? WHERE supplier_id = ?");
-        $stmt->execute([$supplier_name, $contact_person, $phone, $email, $address, $id]);
+        $stmt = $link_id->prepare("UPDATE suppliers SET supplier_name = ?, address = ? WHERE supplier_id = ?");
+        $stmt->execute([$supplier_name, $address, $id]);
         redirectToPage("Supplier updated successfully.");
     }
 }
@@ -58,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 if (isset($_GET["delete"])) {
     $id = (int) $_GET["delete"];
     if ($id > 0) {
-        $stmt = $link_id->prepare("UPDATE suppliers SET is_active = 0 WHERE supplier_id = ?");
+        $stmt = $link_id->prepare("UPDATE suppliers WHERE supplier_id = ?");
         $stmt->execute([$id]);
         redirectToPage("Supplier archived.");
     }
@@ -84,7 +77,7 @@ $whereSql = "WHERE 1=1";
 $params = [];
 
 if ($searchTerm !== '') {
-    $whereSql .= " AND (supplier_name LIKE ? OR contact_person LIKE ? OR email LIKE ?)";
+    $whereSql .= " AND (supplier_name LIKE ?)";
     $params = [$searchValue, $searchValue, $searchValue];
 }
 
@@ -167,33 +160,6 @@ $suppliersList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <div class="input-group">
-                        <label>Contact Person</label>
-                        <div class="input-with-icon">
-                            <input type="text" name="contact_person"
-                                value="<?= htmlspecialchars($editSupplier['contact_person'] ?? ''); ?>">
-                            <i class="fa-regular fa-address-book"></i>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Contact Phone</label>
-                        <div class="input-with-icon">
-                            <input type="text" name="phone"
-                                value="<?= htmlspecialchars($editSupplier['phone'] ?? ''); ?>">
-                            <i class="fa-solid fa-phone"></i>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Email Address</label>
-                        <div class="input-with-icon">
-                            <input type="email" name="email"
-                                value="<?= htmlspecialchars($editSupplier['email'] ?? ''); ?>">
-                            <i class="fa-solid fa-envelope"></i>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
                         <label>Complete Address</label>
                         <textarea name="address"
                             rows="3"><?= htmlspecialchars($editSupplier['address'] ?? ''); ?></textarea>
@@ -215,9 +181,6 @@ $suppliersList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <thead>
                     <tr>
                         <th>Supplier Name</th>
-                        <th>Contact Person</th>
-                        <th>Phone</th>
-                        <th>Email</th>
                         <th>Address</th>
                         <th>Actions</th>
                     </tr>
@@ -225,16 +188,13 @@ $suppliersList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php if (empty($suppliersList)): ?>
                         <tr>
-                            <td colspan="6" style="text-align:center;">No suppliers found.</td>
+                            <td colspan="3" style="text-align:center;">No suppliers found.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($suppliersList as $sup): ?>
                             <tr>
                                 <td data-label="Supplier Name"><strong><?= htmlspecialchars($sup["supplier_name"]); ?></strong>
                                 </td>
-                                <td data-label="Contact Person"><?= htmlspecialchars($sup["contact_person"]); ?></td>
-                                <td data-label="Phone"><?= htmlspecialchars($sup["phone"]); ?></td>
-                                <td data-label="Email"><?= htmlspecialchars($sup["email"]); ?></td>
                                 <td data-label="Address"><?= htmlspecialchars($sup["address"]); ?></td>
                                 <td data-label="Actions">
                                     <div class="action-btns">

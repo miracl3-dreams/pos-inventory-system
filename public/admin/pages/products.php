@@ -132,6 +132,7 @@ $categories = ($categories_query) ? $categories_query->fetchAll(PDO::FETCH_ASSOC
 
 $suppliers_query = $link_id->query("SELECT supplier_id, supplier_name FROM suppliers ORDER BY supplier_name ASC");
 $suppliers = ($suppliers_query) ? $suppliers_query->fetchAll(PDO::FETCH_ASSOC) : [];
+$unitsList = ['Pcs', 'Pack', 'Box', 'Kg', 'Gram', 'Liter', 'Bottle', 'Sack'];
 ?>
 
 <!DOCTYPE html>
@@ -260,12 +261,13 @@ $suppliers = ($suppliers_query) ? $suppliers_query->fetchAll(PDO::FETCH_ASSOC) :
                     </div>
 
                     <div class="input-group">
-                        <label>Product Unit(Pcs)</label>
-                        <div class="input-with-icon">
-                            <input type="text" name="unit" required
-                                value="<?= htmlspecialchars($editProduct['unit'] ?? ''); ?>">
-                            <i class="fa-solid fa-1"></i>
-                        </div>
+                        <label>Product Unit</label>
+                        <select name="unit" required>
+                            <option value="">Select Unit</option>
+                            <?php foreach ($unitsList as $u): ?>
+                                <option value="<?= $u ?>" <?= (isset($editProduct['unit']) && $editProduct['unit'] == $u) ? 'selected' : ''; ?>><?= $u ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
 
@@ -287,8 +289,8 @@ $suppliers = ($suppliers_query) ? $suppliers_query->fetchAll(PDO::FETCH_ASSOC) :
                         <th>Category</th>
                         <th>Supplier</th>
                         <th>Cost Price</th>
-                        <th>Selling Price</th>
-                        <th>Stock Quantity</th>
+                        <th>Sell Price</th>
+                        <th>Stock Qty</th>
                         <th>Unit</th>
                         <th>Actions</th>
                     </tr>
